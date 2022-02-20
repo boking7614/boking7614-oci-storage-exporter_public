@@ -1,0 +1,39 @@
+image: docker:20.10.11
+
+services:
+  - docker:20.10.11-dind
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+  CI_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+  ANSIBLE_PATH: /builds/ansible-playbook/oci_storage_exporter-playbook
+
+stages:
+  - build
+  - deploy
+
+Build-image:
+  stage: build
+  except:
+    changes:
+      - "README.md"
+      # - ".gitlab-ci.yml"
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
+  script:
+    - docker build -t $CI_IMAGE .
+    - docker push $CI_IMAGE
+  tags:
+    - docker-runner
+  
+
+Deploy-container:
+  image: gitlab-registry.sysagecloud.com:5050/ansible/sysage-ansible-runner:latest
+  stage: deploy
+  script:
+    - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.sysagecloud.com/ansible/sysagemsp-playbook.git
+    - ansible-playbook -i $ANSIBLE_PATH/host -e image=$CI_IMAGE $ANSIBLE_PATH/deploy-container.yml
+  needs:
+    - Build-image
+  tags:
+    - docker-runner

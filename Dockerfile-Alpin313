@@ -1,0 +1,12 @@
+FROM python:3.9.5-alpine3.13
+
+COPY oci_storage_exporter/ /opt/oci_storage_exporter
+
+RUN apk add --no-cache gcc musl-dev python3-dev libffi-dev openssl-dev cargo && \
+    pip install --no-cache-dir -r /opt/oci_storage_exporter/requirements.txt
+
+EXPOSE 8091
+
+WORKDIR /opt/oci_storage_exporter
+
+CMD ["python3","exporter.py"]

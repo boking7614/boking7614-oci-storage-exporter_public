@@ -1,0 +1,5 @@
+.dockerignore
+oci_storage_exporter/__pycache__
+oci_storage_exporter/aio-request.py
+oci_storage_exporter/main.py
+oci_storage_exporter/auth.py

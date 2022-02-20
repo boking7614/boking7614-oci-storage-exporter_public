@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sysage-oci-storage-exporter
+  labels:
+    app: storage-exporter
+    tenancy: ginnet
+spec:
+  containers:
+  - name: sysage-oci-storage-exporter
+    image: sysagep500.azurecr.io/oci-exporter/storage:d81d16ca
+    ports:
+    - containerPort: 8091
+    env:
+    - name: INTERVAl_TIME
+      value: "1800"
+    volumeMounts:
+    - name: secret-volume
+      mountPath: /opt/oci_storage_exporter/config
+      readOnly: true
+  volumes:
+  - name: secret-volume
+    secret:
+      secretName: sysage-oci-config
