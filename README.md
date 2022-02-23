@@ -10,6 +10,8 @@
 
 ```bash
 docker run -d --name oci-storage-exporter \
+-v /srv/oci-usage-exporter/config/:/opt/oci_storage_exporter/config \
+--network prometheus-network \
 -p 8091:8091 \
 -e INTERVAl_TIME=30 \
 oci-storage-exporter:dev
