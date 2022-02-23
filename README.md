@@ -1,7 +1,5 @@
 # OCI Storage exporter
 
-
-
 #### 建立config目錄
 
 * 在 oci-storage-exporter路徑之下建立 confige目錄，並放入 oci conifg file與 API Keys
@@ -50,3 +48,5 @@ oci-storage-exporter:dev
    --compartment-id <tenancy id> \
    --statements '["Allow group ExporterGroup to read buckets in tenancy","Allow group ExporterGroup to inspect volume in tenancy"]'
    ```
+#### Grafana Dashboard 
+![image](https://github.com/boking7614/oci-storage-exporter_public/blob/main/images/image_1.png)
